@@ -63,8 +63,8 @@ def main():
     data = json.loads(file.read())
   
   # Setup backup folder
-  # shutil.rmtree("backup")
-  # os.mkdir("backup")
+  shutil.rmtree("backup")
+  os.mkdir("backup")
 
   # Use config options
   my_site = data["this"]
