@@ -7,7 +7,6 @@ app = Flask(__name__)
 
 website = ""
 my_site = ""
-pages = []
 censor = {}
 
 
@@ -16,12 +15,7 @@ def filter(content):
     content = content.decode("utf-8")
     if content.find("<!DOCTYPE html>") != 0:
       raise ValueError()
-    if pages:
-      injection = """
-  <script>alert("hi");</script>
-  """
-    else:
-      injection = ""
+    injection = ""
     content = content.replace("<head>", "<head>" + injection)
     for key, value in censor.items():
       content = content.replace(key, value)
@@ -69,7 +63,6 @@ def main():
   # Use config options
   my_site = data["this"]
   website = data["site"]
-  pages = data["pages"]
   censor[website] = my_site
 
   # Start the webserver
