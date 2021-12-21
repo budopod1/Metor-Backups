@@ -31,13 +31,15 @@ def filter(content):
 
 
 def from_site():
-  path = request.full_path
+  path = request.full_path.split("?")[0]
   response = get(f"https://{website}/{path}")
+  path = path + "" if os.path.split(path)[1] else "/index"
   content = filter(response.content)
   so_far = "backup"
-  for folder in os.path.split(path)[0].split("/"):
+  for folder in os.path.split(path)[0].split("/")[1:]:
     so_far += f"/{folder}"
     if not os.path.exists(so_far):
+      print(so_far)
       os.mkdir(so_far)
   with open(f"backup{path}", "wb" if isinstance(content, bytes) else "w") as file:
     file.write(content)
@@ -61,8 +63,8 @@ def main():
     data = json.loads(file.read())
   
   # Setup backup folder
-  shutil.rmtree("backup")
-  os.mkdir("backup")
+  # shutil.rmtree("backup")
+  # os.mkdir("backup")
 
   # Use config options
   my_site = data["this"]
